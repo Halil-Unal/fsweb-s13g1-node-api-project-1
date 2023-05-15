@@ -33,14 +33,23 @@ server.get("/datas",(req,res)=>{
     }
  
 })
-server.post('/datas', (req,res)=>{
-    const newdata = {
-        id: getId(),
-        name: req.body.name
-    }
-    datas.push(newdata);
-    res.status(201).json(newdata);
-})
+server.post('/datas', (req, res) => {
+  const { name, bio } = req.body;
+
+  if (!name || !bio) {
+    return res.status(400).json({ message: "Lütfen kullanıcı için bir name ve bio sağlayın" });
+  }
+
+  const newdata = {
+    id: getId(),
+    name: name,
+    bio: bio
+  };
+
+  datas.push(newdata);
+  return res.status(201).json(newdata);
+});
+
 
 server.put("/datas/:id", (req, res) => {
     datas = datas.map((data) => {
