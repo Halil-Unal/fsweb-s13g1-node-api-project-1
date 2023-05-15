@@ -24,16 +24,21 @@ server.get("/",(req,res)=>{
     res.send("server is up and running")
 })
 
-server.get("/datas",(req,res)=>{
+server.get("/datas",async (req,res)=>{
+    try{
     if(!datas) {
         res.status(500).json({message:"kullanıcı bilgileri alınamadı"});
     }
     else{
-        res.json(datas)
+       await res.json(datas)
     }
- 
+}
+catch(error){
+    res.status(500).json({message:"bilgiler alınamadı"})
+}
 })
-server.post('/datas', (req, res) => {
+server.post('/datas', async (req, res) => {
+    try{
   const { name, bio } = req.body;
 
   if (!name || !bio) {
@@ -46,8 +51,12 @@ server.post('/datas', (req, res) => {
     bio: bio
   };
 
-  datas.push(newdata);
+ await datas.push(newdata);
   return res.status(201).json(newdata);
+}
+catch(error){
+    res.status(500).json({message:"hata oluştu"})
+}
 });
 
 
